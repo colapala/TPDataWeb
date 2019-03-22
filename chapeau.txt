@@ -1,0 +1,108 @@
+B3244 JOURDAN (04014163) TERREU (04018744) LAHAROTTE (04012615)
+
+1.toutes les capitales 
+//capital
+
+capital	Oranjestad
+capital	Kabul
+capital	Luanda
+
+2.les noms officiels des pays
+//country/name/official
+
+official	Aruba
+official	Islamic Republic of Afghanistan
+official	Republic of Angola
+
+3.la superficie de chaque pays
+//country/@area
+
+area	180
+area	652230
+area	1246700
+
+4.les éléments ayant exactement un attribut
+//*[count(@*)=1]
+
+country	
+native_name	
+native_name	
+
+5.les noms officiels des pays exprimés français, pour ceux qui en ont
+//native_name[@lang="fra"]/official
+
+official	Territoire des Terres australes et antarctiques françaises
+official	République du Burundi
+official	Royaume de Belgique
+
+6.les deuxièmes noms natifs officiels des pays
+//native_name[position()=2]/official
+
+official	Aruba
+official	
+official	República Argentina
+
+7.la somme des superficies (area) des pays d'Europe
+sum(//country[infosContinent/continent="Europe"]/@area)
+
+2.302289746E7
+
+8.les pays qui n'ont pas de nom natif
+//country[count(name/native_name)=0]/name/official
+
+official	Antarctica
+
+9.les pays dont la superficie est inférieure à 100 km²
+//country[@area<100]/name/official
+
+official	Anguilla
+official	Collectivity of Saint Barthélemy
+official	Bermuda
+
+10.les noms officiels des pays ayant plus de 7 voisins (neighbour)
+//country[count(borders/neighbour)>7]/name/official
+
+official	Republic of Austria
+official	Federative Republic of Brazil
+official	People's Republic of China
+
+11.la position de la France dans le document XML
+count(//country[name/common="France"]/preceding-sibling::*)
+
+75.0
+
+12.Les noms officiels des royaumes (nom officiel contient "Kingdom")
+//country[contains(name/official,"Kingdom")]/name/official
+//country/name/official[contains(name/official,"Kingdom")]
+
+official	Kingdom of Belgium
+official	Kingdom of Bahrain
+official	Kingdom of Bhutan
+
+13.les langues des noms natifs des pays sans doublons 
+//native_name[not(@lang=preceding::native_name/@lang)]/@lang
+
+lang	nld
+lang	pap
+lang	prs
+
+
+Modifications du DTD pour la cohérence avec le fichier XPath
+
+InfosRegion->InfosContinent
+area -> supprimé  de country([...])car c'est un attribut
+ajout de area en attribut de country
+tld+ -> tld* car il peut y avoir 0 ou plus de tld
+continent* -> continent car toujours un unique continent
+subregion* -> subregion car il peut y avoir seulement 1 ou 0 subregion
+
+Autres corrections que l'on peut apporter pour rendre le DTD plus restrictif :
+
+coordinates* -> coordinates? car il peut y avoir seulement 1 ou 0 coordinates
+borders* -> borders? car il peut y avoir seulement 1 ou 0 borders
+
+
+
+
+
+
