@@ -11,9 +11,8 @@
 			</head>
 			<body style="background-color:white;">
 				<h1>Les pays du monde</h1> 
-				<br/> 
-     			 Mise en forme par : Jourdan, Terreu, Laharotte, B3244
-				<hr></hr>
+				 <i>Mise en forme par : Jourdan, Terreu, Laharotte, B3244</i>
+				 <xsl:apply-templates select="//metadonnees"/>
 				<hr></hr>
 				
 				<!-- ici je cherche les pays qui ont 6 voisins, je récupère leur nom commun et je les affiche un à un
@@ -42,9 +41,45 @@
 				</xsl:for-each>
 				<hr></hr>
 				
-				Test pour diviser selon les régions :
-				<xsl:for-each select="//country"> <!--mettre //region à la place mais ne marche pas ???-->
-					<xsl:variable name="currentRegion" select="current()"/>
+				<!-- Affichage des tableaux-->
+				
+				<xsl:for-each select="//infosContinent[not(continent=preceding::continent)]/continent"><!--sélection des différents continents-->
+					<xsl:apply-templates select='.'/>
+					 <!--<h3>Pays du continent : <xsl:value-of select='.'/> par sous-régions </h3>
+					
+					<xsl:variable 
+						name="continent">
+							<xsl:value-of select='.'/>
+						</xsl:variable>
+					
+					<xsl:for-each select="//infosContinent[continent=$continent and not(subregion=preceding::subregion)]/subregion">
+						variable pour garder la valeur des sous-régions
+						<xsl:variable 
+						name="sousRegion">
+							<xsl:value-of select='.'/>
+						</xsl:variable>
+					
+						<h4><xsl:value-of select='.'/> (<xsl:value-of select="count(//country[infosContinent/subregion=$sousRegion])"/> pays)</h4>
+						
+						<table border="3" width="100%" align="center">
+							<tr>
+							<th>N°</th>
+							<th>Name</th>
+							<th>Capitale</th>
+							<th>Voisins</th>
+							<th>Position</th>
+							<th>Drapeau</th>
+							</tr>	
+					
+						on affiche le tableau des pays de chaque sous-région 
+						<xsl:for-each select="//country[infosContinent/subregion=$sousRegion]">
+							<xsl:apply-templates select='.'/>Application du template country 
+						</xsl:for-each>
+					
+					</table>
+					</xsl:for-each>-->
+			    </xsl:for-each>
+					<!--<xsl:variable name="currentRegion" select="current()"/> -->
 					<!--<br/>-->
 					<!--Pays du continent : <xsl:value-of select="current()"/> par sous-régions : -->
 					<!--	<xsl:for-each select="//subregion">
@@ -52,20 +87,10 @@
 								<xsl:apply-templates select="current()"/>
 							</xsl:if>
 						</xsl:for-each>   -->
-				</xsl:for-each>
+				
 							
 				<hr></hr>
-			<table border="3" width="100%" align="center">
-					<tr>
-						<th>N°</th>
-						<th>Name</th>
-						<th>Capitale</th>
-						<th>Voisins</th>
-						<th>Position</th>
-						<th>Drapeau</th>
-					</tr>
-					<xsl:apply-templates select="//country"/>
-				</table>
+			
 			</body>
 		</html>
 	</xsl:template>
@@ -86,7 +111,7 @@
 		<xsl:variable 
 			name="cca3"> <!-- récupération du code cc3 du pays -->
 			<xsl:value-of select='.'/>	
-		</xsl:variable>
+		</xsl:variable>		
 		
 		<xsl:choose>
 				<xsl:when test="position() = last()"> <!-- si c'est le dernier élément, j'affiche son nom commun sans la virgule-->
@@ -100,12 +125,58 @@
 		</xsl:for-each>
 	</xsl:template>
 	
+	<!-- template pour afficher les continents de manière unique-->
+	<xsl:template match="continent">
+		<h3>Pays du continent : <xsl:value-of select='.'/> par sous-régions </h3>
+			<!-- variable pour garder la valeur des sous-régions-->
+			<xsl:variable 
+				name="continent">
+				<xsl:value-of select='.'/>
+				</xsl:variable>
+					
+				<xsl:for-each select="//infosContinent[continent=$continent and not(subregion=preceding::subregion)]/subregion">
+					<xsl:apply-templates select='.'/>
+				</xsl:for-each>
+	</xsl:template>
+	
+	<!-- template pour afficher les sous régions de manière unique puis le tableau de pays-->
+	<xsl:template match="subregion">
+		<!-- variable pour garder la valeur des sous-régions-->
+			<xsl:variable 
+				name="sousRegion">
+				<xsl:value-of select='.'/>
+			</xsl:variable>
+					
+			<h4><xsl:value-of select='.'/> (<xsl:value-of select="count(//country[infosContinent/subregion=$sousRegion])"/> pays)</h4>
+						
+			<table border="3" width="100%" align="center">
+				<tr>
+				<th>N°</th>
+				<th>Name</th>
+				<th>Capitale</th>
+				<th>Voisins</th>
+				<th>Position</th>
+				<th>Drapeau</th>
+				</tr>	
+					
+			<!-- on affiche le tableau des pays de chaque sous-région -->
+			<xsl:for-each select="//country[infosContinent/subregion=$sousRegion]">
+				<xsl:apply-templates select='.'/><!--Application du template country--> 
+			</xsl:for-each>
+			</table>
+	</xsl:template>
+	
 	<xsl:template match="country">
 		<tr>
 			<td>
-			<!-- je compte sa position dans le tableau 
-				 -> ce ne sera pas la bonne solution quand on aura plusieurs tableaux-->
-				<xsl:value-of select="count(preceding-sibling::*)"/>
+				<!-- je compte sa position dans le tableau 
+				  il faut compter que les pays qui ont la bonne sous-région-->
+				 <xsl:variable 
+					name="subregion">
+				<xsl:value-of select="infosContinent/subregion"/>
+				</xsl:variable>
+				
+				<xsl:value-of select="1+count(preceding-sibling::*[infosContinent/subregion=$subregion])"/>
 			</td>
 			<td>
 				<span style="color:green">
