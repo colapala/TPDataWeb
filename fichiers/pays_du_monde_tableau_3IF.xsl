@@ -32,11 +32,28 @@
 					</xsl:for-each>
 				</p>
 				
-				<!-- méthode à implémenter, je ne sais pas trop comment trouver le min-->
+				<!-- Affiche le nom le plus court en faisant un tri des pays selon le nombre de caratères de leur nom-->
 				Pays avec le plus court nom :
-				<xsl:for-each select="country/name">
+				<xsl:for-each select="//country/name">
+					<xsl:sort select="string-length(common)" data-type="number" order="ascending"/>
+         						<xsl:if test="position()=1">
+         							<xsl:value-of select="common"/>
+         						</xsl:if>
 				</xsl:for-each>
+				<hr></hr>
 				
+				Test pour diviser selon les régions :
+				<xsl:for-each select="//country"> <!--mettre //region à la place mais ne marche pas ???-->
+					<xsl:variable name="currentRegion" select="current()"/>
+					<!--<br/>-->
+					<!--Pays du continent : <xsl:value-of select="current()"/> par sous-régions : -->
+					<!--	<xsl:for-each select="//subregion">
+							<xsl:if test="current()/../region = $currentRegion">
+								<xsl:apply-templates select="current()"/>
+							</xsl:if>
+						</xsl:for-each>   -->
+				</xsl:for-each>
+							
 				<hr></hr>
 			<table border="3" width="100%" align="center">
 					<tr>
