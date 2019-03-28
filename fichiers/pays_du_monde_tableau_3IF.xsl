@@ -45,49 +45,7 @@
 				
 				<xsl:for-each select="//infosContinent[not(continent=preceding::continent)]/continent"><!--sélection des différents continents-->
 					<xsl:apply-templates select='.'/>
-					 <!--<h3>Pays du continent : <xsl:value-of select='.'/> par sous-régions </h3>
-					
-					<xsl:variable 
-						name="continent">
-							<xsl:value-of select='.'/>
-						</xsl:variable>
-					
-					<xsl:for-each select="//infosContinent[continent=$continent and not(subregion=preceding::subregion)]/subregion">
-						variable pour garder la valeur des sous-régions
-						<xsl:variable 
-						name="sousRegion">
-							<xsl:value-of select='.'/>
-						</xsl:variable>
-					
-						<h4><xsl:value-of select='.'/> (<xsl:value-of select="count(//country[infosContinent/subregion=$sousRegion])"/> pays)</h4>
-						
-						<table border="3" width="100%" align="center">
-							<tr>
-							<th>N°</th>
-							<th>Name</th>
-							<th>Capitale</th>
-							<th>Voisins</th>
-							<th>Position</th>
-							<th>Drapeau</th>
-							</tr>	
-					
-						on affiche le tableau des pays de chaque sous-région 
-						<xsl:for-each select="//country[infosContinent/subregion=$sousRegion]">
-							<xsl:apply-templates select='.'/>Application du template country 
-						</xsl:for-each>
-					
-					</table>
-					</xsl:for-each>-->
-			    </xsl:for-each>
-					<!--<xsl:variable name="currentRegion" select="current()"/> -->
-					<!--<br/>-->
-					<!--Pays du continent : <xsl:value-of select="current()"/> par sous-régions : -->
-					<!--	<xsl:for-each select="//subregion">
-							<xsl:if test="current()/../region = $currentRegion">
-								<xsl:apply-templates select="current()"/>
-							</xsl:if>
-						</xsl:for-each>   -->
-				
+			    	</xsl:for-each>
 							
 				<hr></hr>
 			
@@ -127,16 +85,21 @@
 	
 	<!-- template pour afficher les continents de manière unique-->
 	<xsl:template match="continent">
+		<xsl:variable 
+			name="continent">
+			<xsl:value-of select='.'/>
+		</xsl:variable>
+
+		<xsl:if test="$continent!=''">
+					
 		<h3>Pays du continent : <xsl:value-of select='.'/> par sous-régions </h3>
 			<!-- variable pour garder la valeur des sous-régions-->
-			<xsl:variable 
-				name="continent">
-				<xsl:value-of select='.'/>
-				</xsl:variable>
+			
 					
 				<xsl:for-each select="//infosContinent[continent=$continent and not(subregion=preceding::subregion)]/subregion">
 					<xsl:apply-templates select='.'/>
 				</xsl:for-each>
+		</xsl:if>
 	</xsl:template>
 	
 	<!-- template pour afficher les sous régions de manière unique puis le tableau de pays-->

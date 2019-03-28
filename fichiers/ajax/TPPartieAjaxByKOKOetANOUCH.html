@@ -25,7 +25,7 @@ function setNom(nom) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//charge le fichier XML se trouvant à l'URL relative donné dans le paramètreet le retourne
+//charge le fichier XML se trouvant à l'URL relative donné dans le paramètre et le retourne
 function chargerHttpXML(xmlDocumentUrl) {
 
     var httpAjax;
@@ -133,34 +133,41 @@ function Bouton4_ajaxEmployeesTableau(xmlDocumentUrl, xslDocumentUrl) {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-fondBleu=0;
 
-function ChangeColor() {
+function ChangeColor(numBouton) {
 
-		if(fondBleu==0){
+		if(numBouton==1){
 			document.getElementsByTagName("body")[0].style.backgroundColor= "blue";
 			document.getElementById("myButton1").style.color = "white";
-			fondBleu=1;
-		}else if(fondBleu==1){
+		}else if(numBouton==2){
 			document.getElementsByTagName("body")[0].style.backgroundColor= "white";
-			document.getElementById("myButton1").style.color = "black";
-			fondBleu=0;
 		}
 		
 	}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//fonction bouton 3
+
+function InfosPays() {
+
+    var coutriesTP=chargerHttpXML('countriesTP.xml');
+	
+    var target = countriesTP.getElementsByTagName("official").value;
+	setNom('yo');
+}
 	</script>
 
 </head>
 
-<body <p>by KOKO et ANOUCHKA</p>
+<body <p>by KOKO et ANOUCHKA AKA ANOUCHKOKO</p>
     <p>
-        <input name="button1" type="button" id="myButton1" onClick="ChangeColor()" value="Bouton 1" />
+        <input name="button1" type="button" id="myButton1" onClick="ChangeColor(1)" value="Bouton 1" />
 		<br />
 		<br />
-		<input name="button2" type="button" id="myButton2" onClick="" value="Bouton 2" />
+		<input name="button2" type="button" id="myButton2" onClick="ChangeColor(2)" value="Bouton 2" />
 		<br />
 		<br />
-		<input name="button3" type="button" id="myButton3" onClick="" value="Bouton 3" />
+		<input name="button3" type="button" id="myButton3" onClick="InfosPays()" value="Bouton 3" /><span id="id_nom_a_remplacer" style="color: red; font-weight: bold;">LES NOMS (Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par les noms) </span>
 		<input name="text" type="text" id="myText1" value="Entrez un pays" />
 		<br />
 		<br />
