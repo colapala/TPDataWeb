@@ -1,0 +1,221 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>TP 3IF Ajax</title>
+    <meta name="author" content="Chanèle Jourdan & Corentin Laharottte">
+
+    <script type="text/javascript">
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function recupererPremierEnfantDeTypeNode(n) {
+    var x = n.firstChild;
+    while (x.nodeType != 1) { // Test if x is an element node (and not a text node or other)
+        x = x.nextSibling;
+    }
+    return x;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//change le contenu de l'élement avec l'id "nom" avec la chaine de caractéres en paramètre	  
+function setNom(nom) {
+    var elementHtmlARemplir = window.document.getElementById("id_nom_a_remplacer");
+    elementHtmlARemplir.innerHTML = nom;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//charge le fichier XML se trouvant à l'URL relative donné dans le paramètre et le retourne
+function chargerHttpXML(xmlDocumentUrl) {
+
+    var httpAjax;
+
+    httpAjax = window.XMLHttpRequest ?
+        new XMLHttpRequest() :
+        new ActiveXObject('Microsoft.XMLHTTP');
+
+    if (httpAjax.overrideMimeType) {
+        httpAjax.overrideMimeType('text/xml');
+    }
+
+    //chargement du fichier XML à l'aide de XMLHttpRequest synchrone (le 3° paramètre est défini à false)
+    httpAjax.open('GET', xmlDocumentUrl, false);
+    httpAjax.send();
+
+    return httpAjax.responseXML;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+// Charge le fichier JSON se trouvant à l'URL donnée en paramètre et le retourne
+function chargerHttpJSON(jsonDocumentUrl) {
+
+    var httpAjax;
+
+    httpAjax = window.XMLHttpRequest ?
+        new XMLHttpRequest() :
+        new ActiveXObject('Microsoft.XMLHTTP');
+
+    if (httpAjax.overrideMimeType) {
+        httpAjax.overrideMimeType('text/xml');
+    }
+
+    // chargement du fichier JSON à l'aide de XMLHttpRequest synchrone (le 3° paramètre est défini à false)
+    httpAjax.open('GET', jsonDocumentUrl, false);
+    httpAjax.send();
+
+    var responseData = eval("(" + httpAjax.responseText + ")");
+
+    return responseData;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function Bouton2_ajaxBibliographie(xmlDocumentUrl, xslDocumentUrl, newElementName) {
+
+    var xsltProcessor = new XSLTProcessor();
+
+    // Chargement du fichier XSL à l'aide de XMLHttpRequest synchrone 
+    var xslDocument = chargerHttpXML(xslDocumentUrl);
+
+    // Importation du .xsl
+    xsltProcessor.importStylesheet(xslDocument);
+
+    // Chargement du fichier XML à l'aide de XMLHttpRequest synchrone 
+    var xmlDocument = chargerHttpXML(xmlDocumentUrl);
+
+    // Création du document XML transformé par le XSL
+    var newXmlDocument = xsltProcessor.transformToDocument(xmlDocument);
+
+    // Recherche du parent (dont l'id est "here") de l'élément à remplacer dans le document HTML courant
+    var elementHtmlParent = window.document.getElementById("id_element_a_remplacer");
+    // Premier élément fils du parent
+    var elementHtmlARemplacer = recupererPremierEnfantDeTypeNode(elementHtmlParent);
+    // Premier élément "elementName" du nouveau document (par exemple, "ul", "table"...)
+    var elementAInserer = newXmlDocument.getElementsByTagName(newElementName)[0];
+
+    // Remplacement de l'élément
+    elementHtmlParent.replaceChild(elementAInserer, elementHtmlARemplacer);
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function Bouton3_ajaxEmployees(xmlDocumentUrl) {
+
+
+    var xmlDocument = chargerHttpXML(xmlDocumentUrl);
+
+    //extraction des noms à partir du document XML (avec une feuille de style ou en javascript)
+    var lesNoms = xmlDocument.getElementsByTagName("LastName");
+
+    // Parcours de la liste des noms avec une boucle for et 
+    // construction d'une chaine de charactères contenant les noms séparés par des espaces 
+    // Pour avoir la longueur d'une liste : attribut 'length'
+    // Accès au texte d'un noeud "LastName" : NOM_NOEUD.firstChild.nodeValue
+    var chaineDesNoms = "";
+    for (i = 0; i < lesNoms.length; i++) {
+        if (i > 0) {
+            chaineDesNoms = chaineDesNoms + ", ";
+        }
+        chaineDesNoms = chaineDesNoms + lesNoms[i].firstChild.nodeValue + " ";
+    }
+
+
+    // Appel (ou recopie) de la fonction setNom(...) ou bien autre façon de modifier le texte de l'élément "span"
+    setNom(chaineDesNoms);
+
+
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function Bouton4_ajaxEmployeesTableau(xmlDocumentUrl, xslDocumentUrl) {
+    //commenter la ligne suivante qui affiche la boîte de dialogue!
+    alert("Fonction à compléter...");
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function ChangeColor(numBouton) {
+
+		if(numBouton==1){
+			document.getElementsByTagName("body")[0].style.backgroundColor= "blue";
+			document.getElementById("myButton1").style.color = "white";
+		}else if(numBouton==2){
+			document.getElementsByTagName("body")[0].style.backgroundColor= "white";
+		}
+		
+	}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//fonction bouton 3
+
+function InfosPays() {
+	var xsltProcessor = new XSLTProcessor();
+
+    //Chargement du fichier XSL à l'aide de XMLHttpRequest synchrone 
+    var xslDocument = chargerHttpXML('CherchePays.xsl');
+    
+     // Importation du .xsl
+    xsltProcessor.importStylesheet(xslDocument);
+    
+    xsltProcessor.setParameter('','Pays','France');
+	
+	var essai="yo";
+	var coutriesTP=chargerHttpXML('countriesTP.xml');
+    var target = countriesTP.getElementsByTagName('capital');
+	//setNom('essai : '+target[0].firstChild.nodeValue);
+	setNom(essai);
+}
+	</script>
+
+</head>
+
+<body <p>by KOKO et ANOUCHKA AKA ANOUCHKOKO</p>
+    <p>
+        <input name="button1" type="button" id="myButton1" onClick="ChangeColor(1)" value="Bouton 1" />
+		<br />
+		<br />
+		<input name="button2" type="button" id="myButton2" onClick="ChangeColor(2)" value="Bouton 2" />
+		<br />
+		<br />
+		<input name="button3" type="button" id="myButton3" onClick="InfosPays()" value="Bouton 3" />
+		<input name="text" type="text" id="myText1" value="Entrez un pays" />
+		<br />
+		<br />
+		<input name="button4" type="button" id="myButton4" onClick="" value="Bouton 4" />
+		<br />
+		<br />
+		<input name="button5" type="button" id="myButton5" onClick="" value="Bouton 5" />
+		<br />
+		<br />
+		<input name="button6" type="button" id="myButton6" onClick="" value="Bouton 6" />
+		<br />
+		<br />
+		<input name="button7" type="button" id="myButton7" onClick="" value="Bouton 7" />
+		<br />
+		<br />
+		<input name="button8" type="button" id="myButton8" onClick="" value="Bouton 8" />
+		<br />
+		<br />
+		<input name="button9" type="button" id="myButton9" onClick="" value="Bouton 9" />
+		<br />
+		<br />
+		
+		<input name="text" type="text" id="myText1" value="Toto" />
+        <br />
+		
+       <!-- <input name="button2" type="button" id="myButton2" onClick="Bouton2_ajaxBibliographie('ajax.bib.xml','ajax.bib.xsl','ul');" value="2. AJAX avec ajax.bib.xml/ajax.bib.xsl" />
+        <br />-->
+        
+    </p>
+    <div>
+        <p>Les noms sont : <br/>
+            <span id="id_nom_a_remplacer" style="color: red; font-weight: bold;">LES NOMS (Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par les noms) </span>.</p>
+    </div>
+    <div id="id_element_a_remplacer">
+        <p style="color: red; font-weight: bold;">Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par une bibliographie en XML mise en forme par une feuille de style XSLT...</p>
+    </div>
+
+
+</body>
+
+</html>

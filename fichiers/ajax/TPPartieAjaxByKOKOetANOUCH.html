@@ -149,11 +149,37 @@ function ChangeColor(numBouton) {
 //fonction bouton 3
 
 function InfosPays() {
+	//var xsltProcessor = new XSLTProcessor();
 
-    var coutriesTP=chargerHttpXML('countriesTP.xml');
+    //Chargement du fichier XSL à l'aide de XMLHttpRequest synchrone 
+    //var xslDocument = chargerHttpXML('CherchePays.xsl');
+    
+     // Importation du .xsl
+   // xsltProcessor.importStylesheet(xslDocument);
+    
+    //xsltProcessor.setParameter('','Pays','France');
 	
-    var target = countriesTP.getElementsByTagName("official").value;
-	setNom('yo');
+	var result="pays: France infos: ";
+	var coutriesTP=chargerHttpXML('countriesTP.xml');
+    var target = countriesTP.getElementsByTagName("capital");
+    result=result+target[0].firstChild.nodeValue;
+	setNom(result);
+}
+
+function AffichageSVG() {
+    var elementAInserer = document.createElement('img');
+    elementAInserer.src='exemple.svg';
+    elementAInserer.alt='exemple';
+    document.body.appendChild(elementAInserer);
+}
+
+function AffichageCarte(){
+	var AInserer = document.createElement('img');
+    AInserer.src='worldHigh.svg';
+    AInserer.alt='carte';
+    AInserer.width='1000';
+    AInserer.height='500';
+    document.body.appendChild(AInserer);
 }
 	</script>
 
@@ -167,17 +193,17 @@ function InfosPays() {
 		<input name="button2" type="button" id="myButton2" onClick="ChangeColor(2)" value="Bouton 2" />
 		<br />
 		<br />
-		<input name="button3" type="button" id="myButton3" onClick="InfosPays()" value="Bouton 3" /><span id="id_nom_a_remplacer" style="color: red; font-weight: bold;">LES NOMS (Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par les noms) </span>
+		<input name="button3" type="button" id="myButton3" onClick="InfosPays()" value="Bouton 3" />
 		<input name="text" type="text" id="myText1" value="Entrez un pays" />
 		<br />
 		<br />
-		<input name="button4" type="button" id="myButton4" onClick="" value="Bouton 4" />
+		<input name="button4" type="button" id="myButton4" onClick="AffichageSVG()" value="Bouton 4" />
 		<br />
 		<br />
 		<input name="button5" type="button" id="myButton5" onClick="" value="Bouton 5" />
 		<br />
 		<br />
-		<input name="button6" type="button" id="myButton6" onClick="" value="Bouton 6" />
+		<input name="button6" type="button" id="myButton6" onClick=" AffichageCarte()" value="Bouton 6" />
 		<br />
 		<br />
 		<input name="button7" type="button" id="myButton7" onClick="" value="Bouton 7" />
@@ -204,8 +230,6 @@ function InfosPays() {
     <div id="id_element_a_remplacer">
         <p style="color: red; font-weight: bold;">Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par une bibliographie en XML mise en forme par une feuille de style XSLT...</p>
     </div>
-
-
 </body>
 
 </html>
