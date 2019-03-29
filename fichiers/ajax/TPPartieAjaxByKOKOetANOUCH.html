@@ -148,38 +148,125 @@ function ChangeColor(numBouton) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //fonction bouton 3
 
-function InfosPays() {
-	//var xsltProcessor = new XSLTProcessor();
+function InfosPays(pays) {
+	var xsltProcessor = new XSLTProcessor();
 
     //Chargement du fichier XSL à l'aide de XMLHttpRequest synchrone 
-    //var xslDocument = chargerHttpXML('CherchePays.xsl');
+    	var xslDocument = chargerHttpXML('cherchePays.xsl');
     
      // Importation du .xsl
-   // xsltProcessor.importStylesheet(xslDocument);
+   	 xsltProcessor.importStylesheet(xslDocument);
     
-    //xsltProcessor.setParameter('','Pays','France');
+    	xsltProcessor.setParameter('','Pays',pays);
 	
-	var result="pays: France infos: ";
-	var coutriesTP=chargerHttpXML('countriesTP.xml');
-    var target = countriesTP.getElementsByTagName("capital");
-    result=result+target[0].firstChild.nodeValue;
-	setNom(result);
+	var countriesTP=chargerHttpXML('countriesTP.xml');
+
+// Création du document XML transformé par le XSL
+    	var newXmlDocument = xsltProcessor.transformToDocument(countriesTP);
+
+    // Recherche du parent (dont l'id est "here") de l'élément à remplacer dans le document HTML courant
+    	var elementHtmlParent = window.document.getElementById("id_element_a_remplacer");
+    // Premier élément fils du parent
+    	var elementHtmlARemplacer = recupererPremierEnfantDeTypeNode(elementHtmlParent);
+    // Premier élément "elementName" du nouveau document (par exemple, "ul", "table"...)
+    	var elementAInserer = newXmlDocument.getElementsByTagName('div')[0];
+
+    // Remplacement de l'élément
+    elementHtmlParent.replaceChild(elementAInserer, elementHtmlARemplacer);	
+
 }
 
-function AffichageSVG() {
-    var elementAInserer = document.createElement('img');
-    elementAInserer.src='exemple.svg';
-    elementAInserer.alt='exemple';
-    document.body.appendChild(elementAInserer);
+function AffichageSVG(fichierSVG) {
+   	var ImageSVG=chargerHttpXML(fichierSVG);
+	var SVGToString=new XMLSerializer().serializeToString(ImageSVG);
+	var elementHtmlParent = window.document.getElementById("id_element_a_remplacer");
+    // Premier élément fils du parent
+	var elementHtmlARemplacer = recupererPremierEnfantDeTypeNode(elementHtmlParent);
+    	elementHtmlARemplacer.innerHTML = SVGToString;
 }
 
-function AffichageCarte(){
-	var AInserer = document.createElement('img');
-    AInserer.src='worldHigh.svg';
-    AInserer.alt='carte';
-    AInserer.width='1000';
-    AInserer.height='500';
-    document.body.appendChild(AInserer);
+function AfficherForme() {
+	var icelle= window.document.getElementById("lesFormes").getElementsByTagName("g")[0];
+	
+	for (i = 0; i < icelle.childElementCount; i++) {
+        	icelle.children[i].addEventListener("click", modifyText, false);
+   	}
+}
+
+function modifyText() {
+	var texte = this.getAttribute("title");
+	setNom(texte);
+}
+
+function AfficherPays() {
+	var icelle= window.document.getElementById("id_element_a_remplacer").getElementsByTagName("p")[0].getElementsByTagName("svg")[0].getElementsByTagName("g")[0];
+	
+	for (i = 0; i < icelle.childElementCount; i++) {
+        	icelle.children[i].addEventListener("click", AfficheNom, false);
+   	}
+}
+
+function AfficheNom() {
+	var texte = this.getAttribute("countryname");
+	setNom(texte);
+}
+
+function MapInteractive() {
+	var icelle= window.document.getElementById("id_element_a_remplacer").getElementsByTagName("p")[0].getElementsByTagName("svg")[0].getElementsByTagName("g")[0];
+	
+	for (i = 0; i < icelle.childElementCount; i++) {
+        	icelle.children[i].addEventListener("mouseover", ColorierPays, false);
+		icelle.children[i].addEventListener("mouseleave", DecolorierPays, false);
+   	}
+}
+
+
+function ColorierPays() {
+	this.style.fill= "gold";
+	RecupererTableau(this.getAttribute("countryname"));
+}
+
+function RecupererTableau(pays) {
+	var xsltProcessor = new XSLTProcessor();
+
+    //Chargement du fichier XSL à l'aide de XMLHttpRequest synchrone 
+    	var xslDocument = chargerHttpXML('Tableau.xsl');
+    
+     // Importation du .xsl
+   	 xsltProcessor.importStylesheet(xslDocument);
+    
+    	xsltProcessor.setParameter('','Pays',pays);
+	
+	var countriesTP=chargerHttpXML('countriesTP.xml');
+
+// Création du document XML transformé par le XSL
+    	var newXmlDocument = xsltProcessor.transformToDocument(countriesTP);
+
+    // Recherche du parent (dont l'id est "here") de l'élément à remplacer dans le document HTML courant
+    	var elementHtmlParent = window.document.getElementById("tableau");
+    // Premier élément fils du parent
+    	var elementHtmlARemplacer = recupererPremierEnfantDeTypeNode(elementHtmlParent);
+    // Premier élément "elementName" du nouveau document (par exemple, "ul", "table"...)
+    	var elementAInserer = newXmlDocument.getElementsByTagName('table')[0];
+
+    // Remplacement de l'élément
+    elementHtmlParent.replaceChild(elementAInserer, elementHtmlARemplacer);	
+}
+
+function DecolorierPays() {
+	this.style.fill= "#CCCCCC";	
+}
+
+function Autocompletion(){
+	var icelle= window.document.getElementById("id_element_a_remplacer").getElementsByTagName("p")[0].getElementsByTagName("svg")[0].getElementsByTagName("g")[0];
+	var liste="[";
+	for (i = 0; i < icelle.childElementCount; i++) {
+		if (i==icelle.childElementCount-1){
+			liste=liste=liste+icelle.children[i].getAttribute("countryname")+"]";
+		}else{
+		liste=liste+icelle.children[i].getAttribute("countryname")+",";
+		}
+	}
 }
 	</script>
 
@@ -193,26 +280,26 @@ function AffichageCarte(){
 		<input name="button2" type="button" id="myButton2" onClick="ChangeColor(2)" value="Bouton 2" />
 		<br />
 		<br />
-		<input name="button3" type="button" id="myButton3" onClick="InfosPays()" value="Bouton 3" />
+		<input name="button3" type="button" id="myButton3" onClick="InfosPays(document.getElementById('myText1').value)" value="Bouton 3" />
 		<input name="text" type="text" id="myText1" value="Entrez un pays" />
 		<br />
 		<br />
-		<input name="button4" type="button" id="myButton4" onClick="AffichageSVG()" value="Bouton 4" />
+		<input name="button4" type="button" id="myButton4" onClick="AffichageSVG('exemple.svg')" value="Bouton 4" />
 		<br />
 		<br />
-		<input name="button5" type="button" id="myButton5" onClick="" value="Bouton 5" />
+		<input name="button5" type="button" id="myButton5" onClick="AfficherForme()" value="Bouton 5" />
 		<br />
 		<br />
-		<input name="button6" type="button" id="myButton6" onClick=" AffichageCarte()" value="Bouton 6" />
+		<input name="button6" type="button" id="myButton6" onClick=" AffichageSVG('worldHigh.svg')" value="Bouton 6" />
 		<br />
 		<br />
-		<input name="button7" type="button" id="myButton7" onClick="" value="Bouton 7" />
+		<input name="button7" type="button" id="myButton7" onClick="AfficherPays()" value="Bouton 7" />
 		<br />
 		<br />
-		<input name="button8" type="button" id="myButton8" onClick="" value="Bouton 8" />
+		<input name="button8" type="button" id="myButton8" onClick="MapInteractive()" value="Bouton 8" />
 		<br />
 		<br />
-		<input name="button9" type="button" id="myButton9" onClick="" value="Bouton 9" />
+		<input name="button9" type="button" id="myButton9" onClick="Autocompletion()" value="Bouton 9" />
 		<br />
 		<br />
 		
@@ -226,6 +313,9 @@ function AffichageCarte(){
     <div>
         <p>Les noms sont : <br/>
             <span id="id_nom_a_remplacer" style="color: red; font-weight: bold;">LES NOMS (Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par les noms) </span>.</p>
+    </div>
+    <div id="tableau">
+        <p style="color: red; font-weight: bold;"></p>
     </div>
     <div id="id_element_a_remplacer">
         <p style="color: red; font-weight: bold;">Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par une bibliographie en XML mise en forme par une feuille de style XSLT...</p>
