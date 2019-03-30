@@ -1,0 +1,62 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>TP 3IF Ajax</title>
+    <meta name="author" content="Chanèle Jourdan & Corentin Laharottte">
+
+    <script type="text/javascript" src="partieJavascript.js"></script>
+
+</head>
+
+<body <p> Partie DOM et Ajax, Corentin LAHAROTTE, Chanèle JOURDAN </p>
+    <p>
+        <input name="button1" type="button" id="myButton1" onClick="ChangeColor(1);EffaceTableau()" value="Bouton 1" />
+		<br />
+		<br />
+		<input name="button2" type="button" id="myButton2" onClick="ChangeColor(2);EffaceTableau()" value="Bouton 2" />
+		<br />
+		<br />
+		<input name="button3" type="button" id="myButton3" onClick="InfosPays(document.getElementById('myText1').value);EffaceTableau()" value="Bouton 3" />
+		<span id="inputText">
+		<input name="text" type="text" id="myText1" value="Entrez un pays" />
+		</span>
+		<br />
+		<br />
+		<input name="button4" type="button" id="myButton4" onClick="AffichageSVG('exemple.svg');EffaceTableau()" value="Bouton 4" />
+		<br />
+		<br />
+		<input name="button5" type="button" id="myButton5" onClick="AfficherForme();EffaceTableau()" value="Bouton 5" />
+		<br />
+		<br />
+		<input name="button6" type="button" id="myButton6" onClick=" AffichageSVG('worldHigh.svg');EffaceTableau()" value="Bouton 6" />
+		<br />
+		<br />
+		<input name="button7" type="button" id="myButton7" onClick="AfficherPays();EffaceTableau()" value="Bouton 7" />
+		<br />
+		<br />
+		<input name="button8" type="button" id="myButton8" onClick="MapInteractive()" value="Bouton 8" />
+		<br />
+		<br />
+		<input name="button" type="button" id="myButton10" onClick="Coloriage('//country[languages/fra]/cca2', 'blue')" value="Français" />
+		<br />
+		<br />
+		<input name="button9" type="button" id="myButton9" onClick="Autocompletion();EffaceTableau()" value="Bouton 9" />
+		<br />
+		<br />
+        </datalist>
+    </p>
+    <div>
+        <p> <br/>
+            <span id="id_nom_a_remplacer" style="color: red; font-weight: bold;">  </span> </p>
+    </div>
+    <div id="tableau">
+        <p style="color: red; font-weight: bold;"> </p>
+    </div>
+    <div id="id_element_a_remplacer">
+        <p>  </p>
+    </div>
+</body>
+
+</html>

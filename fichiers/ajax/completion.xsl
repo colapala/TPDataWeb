@@ -7,8 +7,8 @@
 		<html>
 			<body>
 				<span>
-					<input list="myText1">
-					<datalist id="myText1">
+					<input list="list" id="myText1">
+					<datalist id="list">
 						<xsl:for-each select="//country/name/common"> 
 							<xsl:variable 
 								name="nom"> 

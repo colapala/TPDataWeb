@@ -12,37 +12,37 @@
 
 <body <p> Partie DOM et Ajax, Corentin LAHAROTTE, Chanèle JOURDAN </p>
     <p>
-        <input name="button1" type="button" id="myButton1" onClick="ChangeColor(1)" value="Bouton 1" />
+        <input name="button1" type="button" id="myButton1" onClick="ChangeColor(1);EffaceTableau()" value="Bouton 1" />
 		<br />
 		<br />
-		<input name="button2" type="button" id="myButton2" onClick="ChangeColor(2)" value="Bouton 2" />
+		<input name="button2" type="button" id="myButton2" onClick="ChangeColor(2);EffaceTableau()" value="Bouton 2" />
 		<br />
 		<br />
-		<input name="button3" type="button" id="myButton3" onClick="InfosPays(document.getElementById('myText1').value)" value="Bouton 3" />
+		<input name="button3" type="button" id="myButton3" onClick="InfosPays(document.getElementById('myText1').value);EffaceTableau()" value="Bouton 3" />
 		<span id="inputText">
 		<input name="text" type="text" id="myText1" value="Entrez un pays" />
 		</span>
 		<br />
 		<br />
-		<input name="button4" type="button" id="myButton4" onClick="AffichageSVG('exemple.svg')" value="Bouton 4" />
+		<input name="button4" type="button" id="myButton4" onClick="AffichageSVG('exemple.svg');EffaceTableau()" value="Bouton 4" />
 		<br />
 		<br />
 		<input name="button5" type="button" id="myButton5" onClick="AfficherForme()" value="Bouton 5" />
 		<br />
 		<br />
-		<input name="button6" type="button" id="myButton6" onClick=" AffichageSVG('worldHigh.svg')" value="Bouton 6" />
+		<input name="button6" type="button" id="myButton6" onClick=" AffichageSVG('worldHigh.svg');EffaceTableau()" value="Bouton 6" />
 		<br />
 		<br />
-		<input name="button7" type="button" id="myButton7" onClick="AfficherPays()" value="Bouton 7" />
+		<input name="button7" type="button" id="myButton7" onClick="AfficherPays();EffaceTableau()" value="Bouton 7" />
 		<br />
 		<br />
 		<input name="button8" type="button" id="myButton8" onClick="MapInteractive()" value="Bouton 8" />
 		<br />
 		<br />
-		<input name="button" type="button" id="myButton1" onClick="Coloriage('//country[languages/fra]/cca2', 'blue')" value="Français" />
+		<input name="button" type="button" id="myButton10" onClick="Coloriage('//country[languages/fra]/cca2', 'blue')" value="Français" />
 		<br />
 		<br />
-		<input name="button9" type="button" id="myButton9" onClick="Autocompletion()" value="Bouton 9" />
+		<input name="button9" type="button" id="myButton9" onClick="Autocompletion();EffaceTableau()" value="Bouton 9" />
 		<br />
 		<br />
         </datalist>
