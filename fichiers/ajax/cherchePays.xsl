@@ -6,10 +6,10 @@
 	<xsl:template match="/">	
 		<html>
 			<body>
-    				<div>
-					<xsl:value-of select="//country[name/common=$Pays]/name/official"/><br/>
-			
-					<xsl:value-of select="//country[name/common=$Pays]/capital"/> 
+    			<div>
+    				Résultats:<br/>
+					Nom Officiel : <xsl:value-of select="//country[name/common=$Pays]/name/official"/><br/>
+					Capitale : <xsl:value-of select="//country[name/common=$Pays]/capital"/> 
 				</div>
 			</body>
 		</html>
