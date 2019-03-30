@@ -255,18 +255,56 @@ function RecupererTableau(pays) {
 
 function DecolorierPays() {
 	this.style.fill= "#CCCCCC";	
+	var tableau=document.getElementById("tableau");
+	//tableau.removeChild(tableau.firstChild);
+	 //var etatInitial='<p style="color: red; font-weight: bold;"></p>';
+	 //tableau.innerHTML=etatInitial;
 }
 
 function Autocompletion(){
+	/*var List='<input list="NomsPays"><datalist id="NomsPays"></datalist>';
+	//var List=document.createElement("input");
+	//List.list="NomsPays";
+	document.getElementById("myText1").innerHTML=inserList;
+	
 	var icelle= window.document.getElementById("id_element_a_remplacer").getElementsByTagName("p")[0].getElementsByTagName("svg")[0].getElementsByTagName("g")[0];
-	var liste="[";
+	var liste = new Array();
+	
 	for (i = 0; i < icelle.childElementCount; i++) {
-		if (i==icelle.childElementCount-1){
-			liste=liste=liste+icelle.children[i].getAttribute("countryname")+"]";
-		}else{
-		liste=liste+icelle.children[i].getAttribute("countryname")+",";
-		}
+		liste[i]=icelle.children[i].getAttribute("countryname");
 	}
+	
+  var options = '';
+
+  for(var i = 0; i <liste.length; i++){
+    options += '<option value="'+liste[i]+'" />';
+    }
+
+  document.getElementById('NomsPays').innerHTML = options;*/
+  
+  var xsltProcessor = new XSLTProcessor();
+
+    //Chargement du fichier XSL à l'aide de XMLHttpRequest synchrone 
+    	var xslDocument = chargerHttpXML('completion.xsl');
+    
+     // Importation du .xsl
+   	 xsltProcessor.importStylesheet(xslDocument);
+	
+	var countriesTP=chargerHttpXML('countriesTP.xml');
+
+// Création du document XML transformé par le XSL
+    	var newXmlDocument = xsltProcessor.transformToDocument(countriesTP);
+
+    // Recherche du parent (dont l'id est "here") de l'élément à remplacer dans le document HTML courant
+    	var elementHtmlParent = window.document.getElementById("inputText");
+    // Premier élément fils du parent
+    	var elementHtmlARemplacer = recupererPremierEnfantDeTypeNode(elementHtmlParent);
+    // Premier élément "elementName" du nouveau document (par exemple, "ul", "table"...)
+    	var elementAInserer = newXmlDocument.getElementsByTagName('span')[0];
+
+    // Remplacement de l'élément
+    elementHtmlParent.replaceChild(elementAInserer, elementHtmlARemplacer);	
+	
 }
 	</script>
 
@@ -281,7 +319,9 @@ function Autocompletion(){
 		<br />
 		<br />
 		<input name="button3" type="button" id="myButton3" onClick="InfosPays(document.getElementById('myText1').value)" value="Bouton 3" />
+		<span id="inputText">
 		<input name="text" type="text" id="myText1" value="Entrez un pays" />
+		</span>
 		<br />
 		<br />
 		<input name="button4" type="button" id="myButton4" onClick="AffichageSVG('exemple.svg')" value="Bouton 4" />
@@ -302,13 +342,7 @@ function Autocompletion(){
 		<input name="button9" type="button" id="myButton9" onClick="Autocompletion()" value="Bouton 9" />
 		<br />
 		<br />
-		
-		<input name="text" type="text" id="myText1" value="Toto" />
-        <br />
-		
-       <!-- <input name="button2" type="button" id="myButton2" onClick="Bouton2_ajaxBibliographie('ajax.bib.xml','ajax.bib.xsl','ul');" value="2. AJAX avec ajax.bib.xml/ajax.bib.xsl" />
-        <br />-->
-        
+        </datalist>
     </p>
     <div>
         <p>Les noms sont : <br/>
